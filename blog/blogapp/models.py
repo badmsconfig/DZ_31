@@ -46,7 +46,8 @@ class Post(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     # связь с тегом
     tags = models.ManyToManyField(Tag)
-
+    # Два варианта хронения картинок
+    image = models.ImageField(upload_to='posts', null=True, blank=True)
     def __str__(self):
         return self.name
 
@@ -58,3 +59,4 @@ class Imajes(models.Model):
 
     def __str__(self):
         return self.name
+

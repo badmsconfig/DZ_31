@@ -9,3 +9,5 @@ urlpatterns = [
     path('create/', views.create_post, name='create'),
     path('post/<int:id>/', views.post, name='post'),
 ]
+
+

@@ -1,10 +1,4 @@
 from django import forms
-from .models import Post
-
-class ContactForm(forms.Form):
-    name = forms.CharField(label='Название')
-    email = forms.EmailField(label='email')
-    message = forms.CharField(label='Сообщение')
 
 class Anketa(forms.Form):
     name = forms.CharField(label='Имя')
@@ -15,9 +9,3 @@ class Anketa(forms.Form):
     message = forms.CharField(label='Сообщение')
     favorite_book = forms.CharField(label='Любимая книга')
     favorite_movie = forms.CharField(label='Любимый фильм')
-
-# class SearchForm(forms.Form):
-#     q = forms.CharField(label='Поиск')
-
-class SearchForm(forms.Form):
-    q = forms.CharField(label='Поиск')

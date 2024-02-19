@@ -45,9 +45,13 @@
             <a class="nav-link" href="{% url 'blog:create' %}">Создать пост</a>
           </li>
           <li class="nav-item">
+          <a class="nav-link" href="{% url 'blog:about' %}">О компании</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="contact.html">Contact</a>
+            <a class="nav-link" href="{% url 'blog:anketa' %}">Анкета</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'blog:search' %}">Поиск</a>
           </li>
         </ul>
       </div>

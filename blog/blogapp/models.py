@@ -60,3 +60,11 @@ class Imajes(models.Model):
     def __str__(self):
         return self.name
 
+class Search(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    # Другие поля вашей модели
+
+    def __str__(self):
+        return self.title
+

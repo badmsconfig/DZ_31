@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Post
-from .forms import ContactForm, SearchForm
+from .models import Post, Tag
+from .forms import Contact, SearchForm, PostForm
 from .forms import Anketa
 from django.core.mail import send_mail
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.views.generic import ListView, DetailView, CreateView
+
 
 
 
@@ -16,29 +19,35 @@ def main_view(request):
 
 
 def create_post(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
+    if request.method == 'GET':
+        form = PostForm()
+        return render(request, 'blogapp/create.html', context={'form': form})
+    else:
+        form = PostForm(request.POST, files=request.FILES)
         if form.is_valid():
-            # Получить данные из формы
-            name = form.cleaned_data['name']
-            message = form.cleaned_data['message']
-            email = form.cleaned_data['email']
-
-            send_mail(
-        'Contact message',
-                f'Ваше сообщение {message} принято',
-                'from@example.com',
-                [email],
-                fail_silently=True,
-            )
-
+            form.save()
             return HttpResponseRedirect(reverse('blog:index'))
         else:
             return render(request, 'blogapp/create.html', context={'form': form})
-    else:
-        form = ContactForm()
 
-    return render(request, 'blogapp/create.html', context={'form': form})
+# CRUD - CREATE, READ, UPDATE, DELETE
+# список тегов
+class TagListView(ListView):
+    model = Tag
+    template_name = 'blogapp/tag_list.html'
+
+
+# детальная информация
+class TegDetailView(DetailView):
+    model = Tag
+    template_name = 'blogapp/tag_detail.html'
+
+# создание тега
+class TagCreateView(CreateView):
+    # form_class =
+    fields = '__all__'
+    model = Tag
+    success_url = reverse_lazy
 
 def post(request, id):
     post = get_object_or_404(Post, id=id)
@@ -47,22 +56,22 @@ def post(request, id):
 def about(request):
     return render(request, 'blogapp/about.html')
 
-def contact_form(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            # Получить данные из формы
-            name = form.cleaned_data['name']
-            message = form.cleaned_data['message']
-            email = form.cleaned_data['email']
-
-            send_mail(
-                'Contact message',
-                f'Ваше сообщение {message} принято',
-                'from@example.com',
-                [email],
-                fail_silently=True,
-            )
+# def contact_view(request):
+#     if request.method == 'POST':
+#         form = Contact(request.POST)
+#         if form.is_valid():
+#             # Получить данные из формы
+#             name = form.cleaned_data['name']
+#             message = form.cleaned_data['message']
+#             email = form.cleaned_data['email']
+#
+#             send_mail(
+#                 'Contact message',
+#                 f'Ваше сообщение {message} принято',
+#                 'from@example.com',
+#                 [email],
+#                 fail_silently=True,
+#             )
 
 def anketa(request):
     if request.method == 'POST':
@@ -108,3 +117,24 @@ def search(request):
         form = SearchForm()
         return render(request, 'blogapp/search.html', {'form': form})
 
+def contact_view(request):
+    if request.method == 'POST':
+        form = Contact(request.POST)
+        if form.is_valid():
+            # Получить данные из формы
+            name = form.cleaned_data['name']
+            message = form.cleaned_data['message']
+            email = form.cleaned_data['email']
+
+            send_mail(
+            'Contact message',
+            f'Ваше сообщение {message} принято',
+            'from@example.com',
+            [email],
+            fail_silently=True,
+            )
+
+        return HttpResponseRedirect(reverse('contact_success'))  # замените на ваше имя URL
+    else:
+        form = Contact()
+    return render(request, 'blogapp/contact.html', {'form': form})

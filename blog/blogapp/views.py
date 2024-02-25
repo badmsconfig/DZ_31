@@ -47,7 +47,7 @@ class TagCreateView(CreateView):
     # form_class =
     fields = '__all__'
     model = Tag
-    success_url = reverse_lazy('blog: tag_ list')
+    success_url = reverse_lazy('blogapp:tag_list')
     template_name = 'blogapp/tag_create.html'
 
 def post(request, id):

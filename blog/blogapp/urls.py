@@ -13,7 +13,8 @@ urlpatterns = [
     path('create/', views.create_post, name='create'),
     path('contact/', views.contact_view, name='contact'),
     path('tag-list/', views.TagListView.as_view(), name='tag_list'),
-    path('tag-detail/<int:pk>/', views.TegDetailView.as_view(), name='tag_detail')
+    path('tag-detail/<int:pk>/', views.TegDetailView.as_view(), name='tag_detail'),
+    path('tag-create/', views.TagCreateView.as_view(), name='tag_create'),
 
 ]
 

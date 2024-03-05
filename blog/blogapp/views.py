@@ -32,7 +32,6 @@ def create_post(request):
             return render(request, 'blogapp/create.html', context={'form': form})
 
 class NameContextMixin(ContextMixin):
-
     def get_context_data(self, *args, **kwargs):
         """
         Отвечает за передачу параметров в контекст
@@ -41,7 +40,7 @@ class NameContextMixin(ContextMixin):
         :return:
         """
         context = super().get_context_data(*args, **kwargs)
-        context['name'] = 'Теги'
+        context['name'] = 'Список тегов'
         return context
 
 
@@ -52,9 +51,15 @@ class TagListView(ListView, NameContextMixin):
     template_name = 'blogapp/tag_list.html'
     context_object_name = 'tags'
 
+    def get_queryset(self):
+        """
+        Получение данных
+        :return:
+        """
+        return Tag.objects.all()
 
 # детальная информация
-class TegDetailView(DetailView, NameContextMixin):
+class TagDetailView(DetailView, NameContextMixin):
     model = Tag
     template_name = 'blogapp/tag_detail.html'
 
@@ -67,7 +72,19 @@ class TegDetailView(DetailView, NameContextMixin):
         :return:
         """
         self.tag_id = kwargs['pk']
-        return super().get(request,*args, **kwargs)
+        return super().get(request, *args, **kwargs)
+    def get_context_data(self, request, *args, **kwargs):
+        """
+        Отвечает за передачу параметров в контекст
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # self.tag_id = kwargs['pk']
+        # return super().get(request,*args, **kwargs)
+        context = super().get_context_data(*args, **kwargs)
+        context['name'] = 'Список тегов'
+        return context
 
 
     def get_object(self, queryset=None):

@@ -31,6 +31,8 @@ def create_post(request):
         else:
             return render(request, 'blogapp/create.html', context={'form': form})
 
+
+
 class NameContextMixin(ContextMixin):
     def get_context_data(self, *args, **kwargs):
         """

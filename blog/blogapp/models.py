@@ -4,10 +4,9 @@ from django.db import models
 
 class TimeStamp(models.Model):
     """
-    abstract - для нее не создаются таблицы
+    Abstract - для нее не создаются новые таблицы
     данные хранятся в каждом наследнике
     """
-
     create = models.DateTimeField(auto_now_add=True)
     update = models.TextField(blank=True)
 
@@ -15,7 +14,7 @@ class TimeStamp(models.Model):
         abstract  = True
 
 # Create your models here.
-class Category(models.Model):
+class Category(TimeStamp):
     name = models.CharField(max_length=16, unique=True)
     description = models.TextField(blank=True)
 
@@ -64,6 +63,7 @@ class Post(TimeStamp):
     def __str__(self):
         return self.name
 
+# Классическое наследование
 class CoreObject(models.Model):
     name = models.CharField(max_length=32)
 

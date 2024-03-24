@@ -23,7 +23,7 @@ class Anketa(forms.Form):
 # class SearchForm(forms.Form):
 #     q = forms.CharField(label='Поиск')
 
-class SearchForm(forms.Form):
+#class SearchForm(forms.Form):
     q = forms.CharField(label='Поиск')
 
 
@@ -41,4 +41,6 @@ class PostForm(forms.ModelForm):
         model = Post
         #fields = '__all__'
         #fields = ('name', 'category')
-        exclude = ('tags',)
+        exclude = ('user',)
+class PostCreateViev():
+    pass

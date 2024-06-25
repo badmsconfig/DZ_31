@@ -1,10 +1,18 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.functional import cached_property
+
 #from django.contrib.auth.models import User
 from usersapp.models import BlogUser
 from django.conf import settings
 
 # 3 типа наследования: abstract, классическое, proxy
+
+class IsActiveMixin(models.Model):
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
 
 class TimeStamp(models.Model):
     """
@@ -51,13 +59,18 @@ class Category(TimeStamp):
 
     def __str__(self):
         return self.name
-class Tag(models.Model):
+class Tag(IsActiveMixin):
     name = models.CharField(max_length=16, unique=True)
     # author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
+class ActiveManager(models.Manager):
+
+    def get_queryset(self):
+        all_objects = super().get_queryset()
+        return all_objects.filter(is_active=False)
 
 # class Post(TimeStamp):
 #     name = models.CharField(max_length=32, unique=True)
@@ -73,17 +86,41 @@ class Tag(models.Model):
 #     def __str__(self):
 #         return self.name
 
-class Post(TimeStamp):
+class Post(TimeStamp, IsActiveMixin):
+    objects = models.Manager()
+    active_objects = ActiveManager()
     name = models.CharField(max_length=32, unique=True)
     text = models.TextField()
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, related_name='category_posts')
     tags = models.ManyToManyField(Tag)
     image = models.ImageField(upload_to='posts', null=True, blank=True)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None)  # Используйте settings.AUTH_USER_MODEL для ссылки на модель пользователя по умолчанию
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True, blank=True)  # Используйте settings.AUTH_USER_MODEL для ссылки на модель пользователя по умолчанию
+    rating = models.PositiveIntegerField(default=1)
+    is_active = models.BooleanField(default=False)
 
+
+    @cached_property
+    def get_all_tags(self):
+        tags = Tag.objects.all()
+        return tags
     def __str__(self):
         return self.name
 
+    def has_image(self):
+        # print('my image:', self.image)
+        # print('type', type(self.image))
+        return bool(self.image)
+
+    def some_method(self):
+        return 'hello from method'
+
+    def __str__(self):
+        return f'{self.name}, category: {self.category.name}'
+
+    def display_tags(self):
+        tags = self.tags.all()
+        result = ';'.join([item.name for item in tags])
+        return result
 
 # Классическое наследование
 class CoreObject(models.Model):

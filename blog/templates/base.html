@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load str_extensions %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -97,7 +97,7 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="site-heading">
-            <h1>Clean Blog</h1>
+            <h1>{{title|sup}}</h1>
             <span class="subheading">A Blog Theme by Start Bootstrap</span>
           </div>
         </div>
@@ -143,7 +143,11 @@
               </a>
             </li>
           </ul>
-          <p class="copyright text-muted">Copyright &copy; Your Website 2019</p>
+          <p class="copyright text-muted"></p>
+            <button type="button" id="btn-joke" class="btn-info">
+            {{joke}}
+          </button>
+
         </div>
       </div>
     </div>
@@ -157,6 +161,8 @@
   <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
   <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'js/clean-blog.min.js' %}"></script>
+  <script src="{% static 'js/my.js' %}"></script>
+
 
 </body>
 

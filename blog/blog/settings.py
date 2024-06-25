@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-r_(5*@x%sp#b3*unqvr#3wbtoh8i7js5ax9lh9ye+g#2t941n@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 
@@ -39,8 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blogapp',
     'usersapp',
-
+    #'blogapp.tests',
+    'capapp',
+    'debug_toolbar',
+    'rest_framework',
+    'django_cleanup.apps.CleanupConfig',
     ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'blog.urls'
@@ -65,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'blogapp.context_processors.get_joke',
             ],
         },
     },
@@ -76,11 +83,26 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+
+    # 'default': {
+    #     'NAME': 'sitedb',
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'USER': 'django',
+    #     'PASSWORD': 'mu123456',
+    #     'HOST': 'localhost'
+    # }
 }
 
 
@@ -146,3 +168,18 @@ LOGOUT_REDIRECT_URL = '/'
 # Куда идти на логин
 LOGIN_URL = '/users/login'
 
+INTERNAL_IPS = [
+    # Добавьте свой IP-адрес в этот список
+    #'192.168.0.235',
+    # Пример: '192.168.1.1',
+    '127.0.0.1',
+    ]
+
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}

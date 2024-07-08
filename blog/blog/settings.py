@@ -43,8 +43,10 @@ INSTALLED_APPS = [
     'capapp',
     'debug_toolbar',
     'rest_framework',
+    'rest_framework.authtoken',
+    # django_cleanup должен быть самым последним 
     'django_cleanup.apps.CleanupConfig',
-    ]
+        ]
 
 
 MIDDLEWARE = [
@@ -140,7 +142,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # Default primary key field type
@@ -180,6 +182,11 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ]
 }
